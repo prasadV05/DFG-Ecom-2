@@ -22,3 +22,13 @@ class CreateTagViews(APIView):
             # return the serializer error
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class DetailTagView(APIView):
+    def get(self,request,slug):
+        try:
+            tag_object = Tags.objects.get(slug=slug)
+            response_data =ReadTagsSerializers(instance=tag_object).data 
+            return Response(response_data, status.HTTP_200_OK)
+        except Tags.DoesNotExist:
+            return Response({"message": "Tag not found"}, status=status.HTTP_404_NOT_FOUND)
+        except Tags.MultipleObjectsReturened:
+            return Response({"message": "multiple tags exist for the given slug"}, status=status.HTTP_400_BAD_REQUEST)
