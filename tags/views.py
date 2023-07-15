@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from tags.models import Tags
 from tags.serializers import WriteTagsSerializers, ReadTagsSerializers
-from django.db.backends import slugify
+from django.utils.text import slugify
 
 class CreateTagViews(APIView):
     
@@ -17,7 +17,7 @@ class CreateTagViews(APIView):
                 slug=slugify(name)
             )
             json_data = ReadTagsSerializers(instance=tag_object).data
-            return Response(json_data, status=status.HHTP_201_CREATE)
+            return Response(json_data, status=status.HTTP_201_CREATED)
         else:
             # return the serializer error
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
